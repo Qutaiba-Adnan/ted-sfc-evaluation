@@ -1,6 +1,6 @@
 # ted-sfc
 
-Identifying and analyzing traffic events in large-scale, unstructured video data from vehicle-mounted cameras is a significant challenge for enhancing advanced driver assistance systems (ADAS). This thesis presents a conceptual framework that leverages machine learning (ML) and optical flow (OF) for efficient traffic event detection, utilizing space-filling curves (SFCs) to reduce data dimensionality. Our first approach, ML-SFC, uses an ML model predicting human attention to identify events, while the second, OF-SFC, employs an OF algorithm to detect movement. Both methods are evaluated using the synthetic SMIRK dataset and validated on the real-world Zenseact Open Dataset (ZOD). The results show that OF-SFC performs better on the synthetic dataset, while ML-SFC is better on the real-world dataset. Both methods achieve comparable processing speeds, indicating their suitability for real-time applications. This framework could serve as a foundation for scalable solutions to analyze large volumes of unstructured data in the form of traffic event detection or other contexts.
+Identifying and analyzing traffic events in large-scale, unstructured video data from vehicle-mounted cameras is a significant challenge for enhancing advanced driver assistance systems (ADAS). This thesis presents a conceptual framework that leverages machine learning (ML), optical flow (OF), and object detection for efficient traffic event detection, utilizing space-filling curves (SFCs) to reduce data dimensionality. The project uses the real-world Zenseact Open Dataset (ZOD) and Waymo Open Dataset for dataset experiments. This framework could serve as a foundation for scalable solutions to analyze large volumes of unstructured data in the form of traffic event detection or other contexts.
 
 ## Running TED-SFC
 
@@ -38,13 +38,18 @@ data/
 
 Scripts for processing datasets into the correct structure are provided in `src/scripts`. The project currently supports the following datasets:
 
-- [SMIRK](https://www.ai.se/en/labs/data-factory/datasets/smirk-dataset)
 - [ZOD](https://www.zod.zenseact.com)
+- [Waymo Open Dataset](https://waymo.com/open/)
 
 ```bash
 # Running the script to format the ZOD dataset, for example
 python src/scripts/zod/process.py path/to/original/dataset data/zod --mode random --nr-videos 10
+
+# Running the script to format Waymo Perception TFRecords, for example
+python src/scripts/waymo/process.py path/to/waymo/tfrecords data/waymo --camera front --mode random --nr-videos 10
 ```
+
+The Waymo processing script reads Perception TFRecord files and exports one AVI per segment from the selected camera stream. It requires TensorFlow and the Waymo Open Dataset Python package that matches your TensorFlow version.
 
 **Important**: Depending on the Conda environment, ffmpeg may not work. If you cannot process the datasets, deactivate the environment.
 
@@ -73,10 +78,12 @@ Only use the `pyTED-cuda-cv` environment when running the optical flow model.
 To run the TED-SFC pipeline, run the following command:
 
 ```bash
-python src/pipeline.py -d path/to/dataset -o path/to/output -c path/to/config.yml -m [mlnet | transalnet | tasednet | optical-flow] [--cpu] [--annotations-path=path/to/annotations]
+python src/pipeline.py -d path/to/dataset -o path/to/output -c path/to/config.yml -m [mlnet | transalnet | tasednet | optical-flow | faster-rcnn | detr] [--cpu] [--annotations-path=path/to/annotations]
 ```
 
 The pipeline will extract features from the videos using the selected method, convert cell values to Morton codes and run the event detection. The results will be placed in the output directory. Evaluation will be ran if the annotations path is provided.
+
+The `faster-rcnn` and `detr` methods add object-detection feature extraction before the original Morton-code event detector. They detect COCO `person` objects, map the strongest detection per frame to the existing grid, and then continue through the same SFC pipeline as the original methods. The first run may download pretrained model weights through PyTorch or Torch Hub.
 
 ### 6. Evaluate
 
@@ -85,6 +92,8 @@ To evaluate the event detection in terms of F1-score, sensitivity, specificity a
 `python src/evaluate.py path/to/event_window.csv path/to/annotations.yml`
 
 ## Datasets
+
+The ZOD examples below are retained for the current pedestrian-crossing setup. Add Waymo calibration and annotation IDs here once the Waymo subset is selected.
 
 | ZOD Positives | ZOD (1) Negatives | ZOD (2) Negatives | ZOD (3) Negatives | ZOD (4) Negatives |
 | ------------- | ----------------- | ----------------- | ----------------- | ----------------- |
