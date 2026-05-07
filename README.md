@@ -42,14 +42,10 @@ Scripts for processing datasets into the correct structure are provided in `src/
 - [Waymo Open Dataset](https://waymo.com/open/)
 
 ```bash
-# Running the script to format the ZOD dataset, for example
 python src/scripts/zod/process.py path/to/original/dataset data/zod --mode random --nr-videos 10
 
-# Running the script to format Waymo Perception TFRecords, for example
 python src/scripts/waymo/process.py path/to/waymo/tfrecords data/waymo --camera front --mode random --nr-videos 10
 ```
-
-The Waymo processing script reads Perception TFRecord files and exports one AVI per segment from the selected camera stream. It requires TensorFlow and the Waymo Open Dataset Python package that matches your TensorFlow version.
 
 **Important**: Depending on the Conda environment, ffmpeg may not work. If you cannot process the datasets, deactivate the environment.
 
@@ -92,8 +88,6 @@ To evaluate the event detection in terms of F1-score, sensitivity, specificity a
 `python src/evaluate.py path/to/event_window.csv path/to/annotations.yml`
 
 ## Datasets
-
-The ZOD examples below are retained for the current pedestrian-crossing setup. Add Waymo calibration and annotation IDs here once the Waymo subset is selected.
 
 | ZOD Positives | ZOD (1) Negatives | ZOD (2) Negatives | ZOD (3) Negatives | ZOD (4) Negatives |
 | ------------- | ----------------- | ----------------- | ----------------- | ----------------- |
