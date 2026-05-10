@@ -1,0 +1,49 @@
+waymo annotations:
+- id: "000012"
+  event_window: [113, 198]
+  type: right
+- id: "000015"
+  event_window: [31, 91]
+  type: right
+- id: "000063"
+  event_window: [163, 199]
+  type: left
+- id: "000065"
+  event_window: [1, 31]
+  type: left
+- id: "000066"
+  event_window: [17, 55]
+  type: left
+- id: "000074"
+  event_window: [8, 81]
+  type: left
+- id: "000083"
+  event_window: [169, 198]
+  type: right
+- id: "000092"
+  event_window: [81, 180]
+  type: left
+- id: "000099"
+  event_window: [150, 197]
+  type: left
+- id: "000101"
+  event_window: [128, 198]
+  type: left
+- id: "000144"
+  event_window: [52, 89]
+  type: right
+- id: "000146"
+  event_window: [6, 160]
+  type: right
+- id: "000164"
+  event_window: [8, 25]
+  type: left
+- id: "000165"
+  event_window: [111, 178]
+  type: left
+- id: "000174"
+  event_window: [195, 199]
+  type: left
+- id: "000189"
+  event_window: [1, 46]
+  type: left
