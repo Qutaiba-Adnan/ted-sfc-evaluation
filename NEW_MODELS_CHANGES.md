@@ -18,7 +18,7 @@ This file records what changed compared with the original TED-SFC pipeline.
   - Supports `faster-rcnn` and `detr`.
   - Uses pretrained COCO models.
   - Keeps only `person` detections.
-  - Maps each frame's strongest person detection to the existing grid.
+  - Maps each frame's strongest person detection confidence to the existing grid.
   - Saves the same `cell_values.csv` format expected by the original SFC steps.
   - Saves an annotated grid video and cell-value plots, following the existing grid modules.
 
@@ -36,7 +36,7 @@ This file records what changed compared with the original TED-SFC pipeline.
   - Added object-detection score thresholds under `grid_config.object_detection`.
   - Added `detector_config.object_detection.cell_ranges` for ZOD and Waymo.
   - Removed the old synthetic dataset config.
-  - The object-detection cell ranges match the one-hot cell values produced by the new grid step.
+  - The object-detection cell ranges should be calibrated against the confidence-valued cell values produced by the new grid step.
 
 - Updated `README.md`.
   - Added `faster-rcnn` and `detr` to the documented pipeline command.
