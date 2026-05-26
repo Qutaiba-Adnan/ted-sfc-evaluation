@@ -1,3 +1,7 @@
+# Waymo baseline config for MLNet/attention experiments.
+# This preserves the original ZOD pedestrian-crossing pipeline settings for a
+# cross-dataset baseline. The only dataset-specific value changed here is the
+# calibration video id, which must exist in the Waymo splits used for plotting.
 grid_config:
   fps: 10
   attention:
@@ -33,7 +37,7 @@ detector_config:
     - !!set { 1, 2, 3 }
     - !!set { 4, 5, 6 }
   detection_calibration_videos:
-    - "000314"
+    - "000099"
   attention:
     cell_ranges:
       1: [2.7e-07, 5.5e-07]

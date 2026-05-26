@@ -98,7 +98,9 @@ def save_benchmark(output_path, start_time, end_time, nr_videos, nr_frames):
 @click.option(
     "--method",
     "-m",
-    type=click.Choice(["mlnet", "tasednet", "transalnet", "optical-flow"]),
+    type=click.Choice(
+        ["mlnet", "tasednet", "transalnet", "optical-flow", "faster-rcnn", "detr"]
+    ),
     prompt="What method do you want to use?",
     help="The method or model to use.",
 )
@@ -158,6 +160,16 @@ def main(data_path, output_path, config_path, method, annotations_path, cpu):
         print("----------------------------------------")
         run_grid_optical_flow(data_path, output_path, config_path, use_cpu=cpu)
 
+    if method in ["faster-rcnn", "detr"]:
+        print("----------------------------------------")
+        print("Applying object detection grid...")
+        print("----------------------------------------")
+        from grid_object_detection import main as run_grid_object_detection
+
+        run_grid_object_detection(
+            data_path, output_path, config_path, method=method, use_cpu=cpu
+        )
+
     print("----------------------------------------")
     print("Generating Morton codes...")
     print("----------------------------------------")
@@ -174,6 +186,10 @@ def main(data_path, output_path, config_path, method, annotations_path, cpu):
     print("----------------------------------------")
     if method in ["mlnet", "tasednet", "transalnet"]:
         run_detector_morton(output_path, config_path, True)
+    elif method in ["faster-rcnn", "detr"]:
+        run_detector_morton(
+            output_path, config_path, detector_type="object_detection"
+        )
     else:
         run_detector_morton(output_path, config_path, False)
 

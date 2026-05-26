@@ -1,4 +1,3 @@
-waymo annotations:
 - id: "000012"
   event_window: [113, 198]
   type: right

@@ -34,6 +34,11 @@ def parse_arguments():
     group.add_argument(
         "--optical-flow", help="Detect for optical flow", action="store_true"
     )
+    group.add_argument(
+        "--object-detection",
+        help="Detect for object detection",
+        action="store_true",
+    )
 
     return parser.parse_args()
 
@@ -255,7 +260,7 @@ def detect_event(
         return None
 
 
-def main(data_path: str, config_path: str, use_attention: bool):
+def main(data_path: str, config_path: str, use_attention: bool = False, detector_type: str = None):
     # Load config
     config = helper.load_yml(config_path)
     grid_config = config["grid_config"]
@@ -270,12 +275,12 @@ def main(data_path: str, config_path: str, use_attention: bool):
     cell_gap_time_limits = detector_config["cell_gap_time_limits"]
     event_length_limit = detector_config["event_length_limit_seconds"]
 
-    # Type variables, either attention or optical flow
-    type_config = (
-        detector_config["attention"]
-        if use_attention
-        else detector_config["optical_flow"]
-    )
+    # Type variables: attention, optical flow, or object detection. Keep the
+    # previous boolean argument style for existing callers.
+    if detector_type is None:
+        detector_type = "attention" if use_attention else "optical_flow"
+
+    type_config = detector_config[detector_type]
     cell_ranges = type_config["cell_ranges"]
 
     if not len(cell_ranges) - 1 == len(cell_gap_time_limits):
@@ -334,4 +339,5 @@ def main(data_path: str, config_path: str, use_attention: bool):
 
 if __name__ == "__main__":
     args = parse_arguments()
-    main(args.data_path, args.config_path, args.attention)
+    selected_type = "object_detection" if args.object_detection else None
+    main(args.data_path, args.config_path, args.attention, selected_type)
