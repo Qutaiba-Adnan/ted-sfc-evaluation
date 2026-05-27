@@ -105,6 +105,40 @@ ffmpeg -framerate 10 -i data/waymo_frames/[segment_id]/%06d.jpg -vf scale=1280:7
 
 The Waymo subset IDs used for the experiments are listed in the dataset table below.
 
+#### Automatic Pedestrian Sequence Filtering
+
+A YOLO-based filtering script was used to automatically scan ZOD and Waymo dataset sequences and identify frames containing pedestrians. This step helped reduce manual inspection effort by generating a shortlist of candidate sequences likely to contain pedestrian-related events.
+
+The script processes frames from each sequence, performs pedestrian detection using a configurable confidence threshold, and generates CSV reports containing matched sequences and matched frames.
+
+##### Script location (in the repo):
+
+```bash
+scripts/find_pedestrian_sequences.py
+```
+
+##### To run the script:
+
+```bash
+python find_pedestrian_sequences.py \
+  --dataset_root /path/to/dataset/sequences \
+  --start_sequence 000001 \
+  --end_sequence 001472 \
+  --person_conf 0.40 \
+  --output_prefix zod_pedestrian
+```
+
+##### Example Output Files:
+
+```bash
+zod_pedestrian_sequences_report.csv
+zod_pedestrian_frames_report.csv
+waymo_pedestrian_sequences_report.csv
+waymo_pedestrian_frames_report.csv
+```
+
+The generated reports were later used for manual visual analysis and final positive/negative sequence selection for the thesis experiments.
+
 **Important**: Dataset conversion requires the `ffmpeg` executable. If `ffmpeg -version` does not work inside the Conda environment, run the conversion command from a shell where FFmpeg is available.
 
 ### 4. Optional: Enable GPU-accelerated Optical Flow (NVIDIA CUDA-enabled GPUs only)
