@@ -120,7 +120,7 @@ scripts/find_pedestrian_sequences.py
 ##### To run the script:
 
 ```bash
-python3 find_pedestrian_sequences.py \
+python find_pedestrian_sequences.py \
   --dataset_root /path/to/dataset/sequences \
   --start_sequence 000001 \
   --end_sequence 001472 \
